@@ -10,6 +10,12 @@ public class ChatController {
 
     ChatRepository chatRepository = ChatRepository.getInstance();
 
+    @RequestMapping("/")
+    @ResponseBody
+    String home() {
+        return "Welcome to Hessian Chat!";
+    }
+
     @PostMapping("/message/{chatRoomId}")
     HttpStatus newMessage(@RequestBody Message message, @PathVariable Long chatRoomId) {
         chatRepository.addMessage(chatRoomId, message);
