@@ -1,15 +1,13 @@
-package hello;
+package server;
 
-import hello.model.ChatRoom;
-import hello.model.Message;
+import api.model.ChatRoom;
+import api.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ChatRepository {

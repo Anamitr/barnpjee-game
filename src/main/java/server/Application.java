@@ -1,17 +1,15 @@
-package hello;
+package server;
 
-import hello.service.CabBookingService;
-import hello.service.CabBookingServiceImpl;
-import hello.service.ChatService;
-import hello.service.ChatServiceImpl;
+import api.service.CabBookingService;
+import server.service.CabBookingServiceImpl;
+import api.service.ChatService;
+import server.service.ChatServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.caucho.HessianServiceExporter;
-import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
 import org.springframework.remoting.support.RemoteExporter;
 
 @Configuration

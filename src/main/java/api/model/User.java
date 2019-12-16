@@ -1,4 +1,4 @@
-package hello.model;
+package api.model;
 
 public class User {
 }

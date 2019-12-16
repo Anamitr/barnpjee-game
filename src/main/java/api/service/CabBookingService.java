@@ -1,7 +1,7 @@
-package hello.service;
+package api.service;
 
-import hello.exception.BookingException;
-import hello.model.Booking;
+import api.exception.BookingException;
+import api.model.Booking;
 
 public interface CabBookingService {
     Booking bookRide(String pickUpLocation) throws BookingException;

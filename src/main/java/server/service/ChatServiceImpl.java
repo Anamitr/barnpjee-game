@@ -1,12 +1,11 @@
-package hello.service;
+package server.service;
 
-import hello.ChatRepository;
-import hello.model.ChatRoom;
-import hello.model.Message;
+import api.service.ChatService;
+import server.ChatRepository;
+import api.model.ChatRoom;
+import api.model.Message;
 
-import java.util.List;
-
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
 
     ChatRepository chatRepository = ChatRepository.getInstance();
 

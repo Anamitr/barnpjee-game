@@ -1,9 +1,7 @@
-package hello.service;
+package api.service;
 
-import hello.model.ChatRoom;
-import hello.model.Message;
-
-import java.util.List;
+import api.model.ChatRoom;
+import api.model.Message;
 
 public interface ChatService {
 
