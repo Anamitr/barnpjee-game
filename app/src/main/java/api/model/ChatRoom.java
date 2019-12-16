@@ -23,4 +23,13 @@ public class ChatRoom implements Serializable {
 //    public void setMessageList(List<Message> messageList) {
 //        this.messageList = messageList;
 //    }
+
+
+    @Override
+    public String toString() {
+        return "ChatRoom{" +
+                "id=" + id +
+                ", messageList=" + messageList +
+                '}';
+    }
 }

@@ -66,9 +66,9 @@ class ChatActivity : AppCompatActivity() {
 
     fun generateSampleMessageList() : List<Message> {
         val messageList = ArrayList<Message>()
-        messageList.add(Message("Spielberg", "Hello"))
-        messageList.add(Message("Parystokles", "Ich bin Vulgaris"))
-        messageList.add(Message("Demistoteles", "Magistralis"))
+        messageList.add(Message(-1,"Spielberg", "Hello"))
+        messageList.add(Message(-1,"Parystokles", "Ich bin Vulgaris"))
+        messageList.add(Message(-1,"Demistoteles", "Magistralis"))
         return messageList
     }
 
@@ -81,12 +81,12 @@ class ChatActivity : AppCompatActivity() {
 
     fun sendMessage(view : View) {
         GlobalScope.launch {
-            val message = Message(userName, message_edit_text.text.toString())
-            chatService.postMessage(chatId, message)
+            val message = Message(-1, userName, message_edit_text.text.toString())
+            val newMessageId = chatService.postMessage(chatId, message)
 
 //            messageList.add(message)
 //            refreshRecyclerView()
-            EventBus.getDefault().post(NewMessageEvent(chatId, message))
+            EventBus.getDefault().post(NewMessageEvent(chatId, Message(newMessageId, userName, message_edit_text.text.toString())))
             message_edit_text.setText("")
             val imm: InputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

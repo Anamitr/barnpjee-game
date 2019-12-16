@@ -1,6 +1,5 @@
 package com.example.hessianchatclient
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
 
     val hessianFactory: HessianProxyFactory = HessianProxyFactory()
+    val chatService =
+        hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setTestData()
 
         val testButton = findViewById<Button>(R.id.test_button) as Button
-        testButton.setOnClickListener(View.OnClickListener { testChatService() })
+        testButton.setOnClickListener(View.OnClickListener { testUpdatingMessages() })
     }
 
     private fun setTestData() {
@@ -83,10 +84,8 @@ class MainActivity : AppCompatActivity() {
             Log.v(TAG, "testChatService")
 
             try {
-                val chatService =
-                    hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
 
-                val message = Message("Hor", "Omega")
+                val message = Message(-1, "Hor", "Omega")
                 chatService.postMessage(3L, message)
 //            for (i in 1..5) {
 //                chatService.postMessage(3L, message)
@@ -102,7 +101,20 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
 
-
+    fun testUpdatingMessages() {
+        GlobalScope.launch {
+            val chatRoomId = 60L
+            val lastMessageId = 8L
+            for (character in 'a'..'m') {
+                val message = Message(-1, "Kornelius", character.toString())
+                chatService.postMessage(chatRoomId, message)
+            }
+            val chatRoom = chatService.getAllMessages(chatRoomId)
+            Log.v(TAG, "All messages: $chatRoom")
+            val newMessages = chatService.getMessagesUpdate(chatRoomId, lastMessageId)
+            Log.v(TAG, "Messages from $lastMessageId: $newMessages")
+        }
     }
 }
