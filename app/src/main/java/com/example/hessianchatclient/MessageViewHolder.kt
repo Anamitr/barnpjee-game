@@ -15,13 +15,8 @@ class MessageViewHolder internal constructor(inflater: LayoutInflater, parent: V
             false
         )
     ) {
-    val usernameTextView : TextView
-    val messageText: TextView
-
-    init {
-        usernameTextView = itemView.findViewById(R.id.username_textview)
-        messageText = itemView.findViewById(R.id.message_body_textview)
-    }
+    private val usernameTextView : TextView = itemView.findViewById(R.id.username_textview)
+    private val messageText: TextView = itemView.findViewById(R.id.message_body_textview)
 
     fun bind(message: Message) {
         usernameTextView.text = message.user

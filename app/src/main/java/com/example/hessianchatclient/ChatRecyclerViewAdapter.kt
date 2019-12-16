@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import api.model.Message
 
-class ChatRecyclerViewAdapter(private val dataset: List<Message>) :
+class ChatRecyclerViewAdapter(private var dataset: List<Message>) :
     RecyclerView.Adapter<MessageViewHolder>() {
     companion object {
         val TAG = ChatRecyclerViewAdapter::class.java.simpleName
@@ -21,6 +21,10 @@ class ChatRecyclerViewAdapter(private val dataset: List<Message>) :
         val message: Message = dataset[position]
         Log.v(TAG, "Binding message: ${message.messageContent}")
         holder.bind(message)
+    }
+
+    fun setItems(messageList: List<Message>) {
+        this.dataset = messageList
     }
 
     override fun getItemCount(): Int = dataset.size

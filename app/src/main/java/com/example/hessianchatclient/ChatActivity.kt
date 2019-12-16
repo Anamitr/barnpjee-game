@@ -7,7 +7,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import api.model.Message
+import api.service.ChatService
+import com.caucho.hessian.client.HessianProxyFactory
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ChatActivity : AppCompatActivity() {
@@ -40,6 +44,8 @@ class ChatActivity : AppCompatActivity() {
 //    private lateinit var viewAdapter: RecyclerView.Adapter<*>
 //    private lateinit var viewManager: RecyclerView.LayoutManager
 
+    val hessianFactory: HessianProxyFactory = HessianProxyFactory()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.hessianchatclient.R.layout.activity_chat)
@@ -57,6 +63,8 @@ class ChatActivity : AppCompatActivity() {
             adapter = ChatRecyclerViewAdapter(messageList)
         }
 
+        loadAllMessages()
+
         return
     }
 
@@ -66,5 +74,16 @@ class ChatActivity : AppCompatActivity() {
         messageList.add(Message("Parystokles", "Ich bin Vulgaris"))
         messageList.add(Message("Demistoteles", "Magistralis"))
         return messageList
+    }
+
+    fun loadAllMessages() {
+        GlobalScope.launch {
+            val chatService =
+                hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
+            val chatRoom = chatService.getAllMessages(3L)
+            messageList = chatRoom.messageList
+            (recyclerview_message_list.adapter as ChatRecyclerViewAdapter).setItems(messageList)
+            recyclerview_message_list.adapter?.notifyDataSetChanged()
+        }
     }
 }
