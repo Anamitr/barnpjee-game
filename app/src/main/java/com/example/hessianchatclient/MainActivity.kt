@@ -1,5 +1,6 @@
 package com.example.hessianchatclient
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +10,7 @@ import api.model.Message
 import api.service.CabBookingService
 import api.service.ChatService
 import com.caucho.hessian.client.HessianProxyFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -19,21 +21,28 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
-    val HEROKU_URL = "https://hessian-chat.herokuapp.com/"
-    val LOCALHOST_URL = "http:/10.0.2.2:8080/"
-    val BASE_URL = LOCALHOST_URL
-    val hessianBookingUrl: String = "${BASE_URL}booking"
-    val hessianChatUrl: String = "${BASE_URL}chat"
+
+
     val hessianFactory: HessianProxyFactory = HessianProxyFactory()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        ProxyFactory.init(classLoader, hessianUrl)
+        setTestData()
 
         val testButton = findViewById<Button>(R.id.test_button) as Button
         testButton.setOnClickListener(View.OnClickListener { testChatService() })
+    }
+
+    private fun setTestData() {
+        usernameEditText.setText("Arystoteles")
+        chatIdEditText.setText("6")
+    }
+
+    fun startChatActivity(v : View) {
+        val intent = ChatActivity.newIntent(this, usernameEditText.text.toString(), chatIdEditText.text.toString())
+        startActivity(intent)
     }
 
     fun sendHessianBookingRequest() {
@@ -59,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 //            factory.setHessian2Reply(false)
             val service = factory.create(
                 CabBookingService::class.java,
-                hessianBookingUrl
+                HESSIAN_BOOKING_URL
             ) as CabBookingService
             val output = service.bookRide("Roweckiego 23")
             Log.v(TAG, output.toString())
@@ -72,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 val chatService =
-                    hessianFactory.create(ChatService::class.java, hessianChatUrl) as ChatService
+                    hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
 
                 val message = Message("Hor", "Omega")
                 chatService.postMessage(3L, message)

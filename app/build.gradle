@@ -37,4 +37,6 @@ dependencies {
 //    implementation project(':hessianlib')
     //    api group: 'com.caucho', name: 'hessian', version: '4.0.63'
     implementation files('libs/flamingo-android-hessian-client-2.2.0.jar')
+
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

@@ -1,27 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/hello_text_view"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/usernameEditText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello Hessian!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/chatIdEditText"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <EditText
+        android:id="@+id/chatIdEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Chat id"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/enterChatButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/enterChatButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Enter chat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/chatIdEditText"
+        app:layout_constraintRight_toRightOf="@id/chatIdEditText"
+        app:layout_constraintTop_toBottomOf="@id/chatIdEditText"
+        android:onClick="startChatActivity"/>
 
     <Button
         android:id="@+id/test_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/hello_text_view"
-        android:text="Test button" />
-<!--        android:onClick="sendHessianRequest"/>-->
+        app:layout_constraintTop_toBottomOf="@id/enterChatButton"
+        android:text="Test button"
+        android:visibility="visible"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--        android:onClick="sendHessianRequest"/>-->
