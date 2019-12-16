@@ -47,7 +47,8 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:enabled="false"
-            android:background="@mipmap/send"/>
+            android:background="@mipmap/send"
+            android:onClick="sendMessage"/>
 
     </LinearLayout>
 

@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     val hessianFactory: HessianProxyFactory = HessianProxyFactory()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +39,12 @@ class MainActivity : AppCompatActivity() {
         chatIdEditText.setText("6")
     }
 
-    fun startChatActivity(v : View) {
-        val intent = ChatActivity.newIntent(this, usernameEditText.text.toString(), chatIdEditText.text.toString())
+    fun startChatActivity(v: View) {
+        val intent = ChatActivity.newIntent(
+            this,
+            usernameEditText.text.toString(),
+            chatIdEditText.text.toString()
+        )
         startActivity(intent)
     }
 
@@ -90,11 +93,11 @@ class MainActivity : AppCompatActivity() {
 //            }
 //
                 val chatRoom = chatService.getAllMessages(3L)
-                for(message in chatRoom.messageList) {
+                for (message in chatRoom.messageList) {
                     Log.v(TAG, message.toString())
                 }
 //                Log.v(TAG, "messages: ${chatRoom.messageList}}")
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Log.e(TAG, e.localizedMessage)
             }
 
