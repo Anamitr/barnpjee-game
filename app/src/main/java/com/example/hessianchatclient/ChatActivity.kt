@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import api.model.Message
@@ -13,6 +14,8 @@ import com.caucho.hessian.client.HessianProxyFactory
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 
 class ChatActivity : AppCompatActivity() {
@@ -32,7 +35,7 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var userName : String
     private var chatId : Long = -1
-    private var messageList: List<Message> = ArrayList()
+    private var messageList: MutableList<Message> = ArrayList()
 
     val hessianFactory: HessianProxyFactory = HessianProxyFactory()
     val chatService =
@@ -72,18 +75,53 @@ class ChatActivity : AppCompatActivity() {
     fun loadAllMessages() {
         GlobalScope.launch {
             val chatRoom = chatService.getAllMessages(chatId)
-            messageList = chatRoom.messageList
-            (recyclerview_message_list.adapter as ChatRecyclerViewAdapter).setItems(messageList)
-            recyclerview_message_list.adapter?.notifyDataSetChanged()
+            refreshRecyclerViewWithList(chatRoom.messageList)
         }
     }
 
     fun sendMessage(view : View) {
         GlobalScope.launch {
-            chatService.postMessage(chatId, Message(userName, message_edit_text.text.toString()))
+            val message = Message(userName, message_edit_text.text.toString())
+            chatService.postMessage(chatId, message)
 
+//            messageList.add(message)
+//            refreshRecyclerView()
+            EventBus.getDefault().post(NewMessageEvent(chatId, message))
             message_edit_text.setText("")
+            val imm: InputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
 //            Toast.makeText(this@ChatActivity, "Message sent", Toast.LENGTH_SHORT).show()
         }
     }
+
+    @Subscribe
+    fun onMessageEvent(event: NewMessageEvent) {
+        if(event.chatRoomId == chatId) {
+            messageList.add(event.newMessage)
+            refreshRecyclerView()
+        }
+    }
+
+    fun refreshRecyclerViewWithList(newMessageList: MutableList<Message>) {
+        messageList = newMessageList
+        refreshRecyclerView()
+    }
+
+    fun refreshRecyclerView() {
+        (recyclerview_message_list.adapter as ChatRecyclerViewAdapter).setItems(messageList)
+        recyclerview_message_list.adapter?.notifyDataSetChanged()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    class NewMessageEvent(val chatRoomId: Long, val newMessage: Message)
 }

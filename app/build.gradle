@@ -39,4 +39,5 @@ dependencies {
     implementation files('libs/flamingo-android-hessian-client-2.2.0.jar')
 
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }
