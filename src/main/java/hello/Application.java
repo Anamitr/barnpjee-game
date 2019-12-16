@@ -2,6 +2,8 @@ package hello;
 
 import hello.service.CabBookingService;
 import hello.service.CabBookingServiceImpl;
+import hello.service.ChatService;
+import hello.service.ChatServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,17 +19,33 @@ import org.springframework.remoting.support.RemoteExporter;
 @EnableAutoConfiguration
 public class Application {
 
+    @Bean
+    CabBookingService bookingService() {
+        return new CabBookingServiceImpl();
+    }
 
+    @Bean
+    ChatService chatService() {
+        return new ChatServiceImpl();
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
     @Bean(name = "/booking")
-    RemoteExporter bookingService() {
+    RemoteExporter hessianBookingService() {
         HessianServiceExporter exporter = new HessianServiceExporter();
-        exporter.setService( new CabBookingServiceImpl() );
-        exporter.setServiceInterface( CabBookingService.class );
+        exporter.setService(bookingService());
+        exporter.setServiceInterface(CabBookingService.class);
+        return exporter;
+    }
+
+    @Bean(name = "/chat")
+    RemoteExporter hessianChatService() {
+        HessianServiceExporter exporter = new HessianServiceExporter();
+        exporter.setService(chatService());
+        exporter.setServiceInterface(ChatService.class);
         return exporter;
     }
 }

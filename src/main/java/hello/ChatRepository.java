@@ -23,11 +23,12 @@ public class ChatRepository {
     Map<Long, ChatRoom> chatRooms = new HashMap<>();
     private final AtomicLong counter = new AtomicLong();
 
-    public void addMessage(Long chatRoomId, Message message) {
+    public Long addMessage(Long chatRoomId, Message message) {
         ChatRoom chat = getChatRoom(chatRoomId);
         chat.getMessageList().add(message);
         chatRooms.put(chatRoomId, chat);
         saveChatRooms();
+        return (long) chat.getMessageList().size();
     }
 
     public ChatRoom getChatRoom(Long chatRoomId) {
