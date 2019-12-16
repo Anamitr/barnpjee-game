@@ -1,24 +1,13 @@
 package com.example.hessianchatclient
 
-import android.R
-import android.R.id
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.getIntent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputFilter
-import android.text.InputFilter.LengthFilter
-import android.text.TextWatcher
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import api.model.Message
-import api.model.User
+import kotlinx.android.synthetic.main.activity_chat.*
 
 
 class ChatActivity : AppCompatActivity() {
@@ -45,16 +34,37 @@ class ChatActivity : AppCompatActivity() {
 
     private lateinit var userName : String
     private lateinit var chatName : String
+    private lateinit var messageList: List<Message>
 
-    private val messageList: List<Message> = ArrayList()
+//    private lateinit var recyclerView: RecyclerView
+//    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+//    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.hessianchatclient.R.layout.activity_chat)
 
+        messageList = generateSampleMessageList()
+
         userName = intent.getStringExtra(INTENT_USER_NAME)
         chatName = intent.getStringExtra(INTENT_CHAT_NAME)
 
         Toast.makeText(this, "$userName : $chatName", Toast.LENGTH_SHORT).show()
+
+        recyclerview_message_list.apply {
+//            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@ChatActivity)
+            adapter = ChatRecyclerViewAdapter(messageList)
+        }
+
+        return
+    }
+
+    fun generateSampleMessageList() : List<Message> {
+        val messageList = ArrayList<Message>()
+        messageList.add(Message("Spielberg", "Hello"))
+        messageList.add(Message("Parystokles", "Ich bin Vulgaris"))
+        messageList.add(Message("Demistoteles", "Magistralis"))
+        return messageList
     }
 }

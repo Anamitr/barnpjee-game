@@ -16,7 +16,7 @@
 <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reyclerview_message_list"
+        android:id="@+id/recyclerview_message_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/send_message_linear_layout"
