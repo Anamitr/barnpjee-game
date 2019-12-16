@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,38 +20,35 @@ public class ChatRepository {
     }
 
     Map<Long, ChatRoom> chatRooms = new HashMap<>();
-    private final AtomicLong counter = new AtomicLong();
+    private final AtomicLong chatRoomCounter = new AtomicLong();
 
     public Long addMessage(Long chatRoomId, Message message) {
         ChatRoom chat = getChatRoom(chatRoomId);
-        chat.getMessageList().add(message);
+        List<Message> messageList = chat.getMessageList();
+        Message newMessage = new Message((long) messageList.size(), message.getUser(), message.getMessageContent());
+        messageList.add(newMessage);
         chatRooms.put(chatRoomId, chat);
         saveChatRooms();
-        return (long) chat.getMessageList().size();
+        return (long) messageList.size();
     }
 
     public ChatRoom getChatRoom(Long chatRoomId) {
         ChatRoom chat = chatRooms.get(chatRoomId);
         if(chat == null) {
-            chat = new ChatRoom(counter.incrementAndGet());
+            chat = new ChatRoom(chatRoomCounter.incrementAndGet());
         }
         return chat;
     }
 
+    public List<Message> findMessagesNewerThan(Long chatRoomId, Long lastMessageId) {
+        ChatRoom chatRoom = getChatRoom(chatRoomId);
+        List<Message> messageList = chatRoom.getMessageList();
+        return messageList.subList((int)(lastMessageId+1), messageList.size());
+    }
+
     private void saveChatRooms() {
-//        Properties properties = new Properties();
-//        for (Map.Entry<Long, ChatRoom> entry : chatRooms.entrySet()) {
-//            properties.put(entry.getKey().toString(), entry.getValue());
-//        }
-//        try {
-//            properties.store(new FileOutputStream("data.properties"), null);
-//        } catch (IOException e) {
-//            logger.error(e.getLocalizedMessage());
-//            e.printStackTrace();
-//        }
         try {
             File file = new File(DB_FILE_NAME);
-//            file.mkdirs();
             file.createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(file, false);
             ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
@@ -66,17 +64,6 @@ public class ChatRepository {
     }
 
     private void loadChatRooms() {
-//        Properties properties = new Properties();
-//        try {
-//            properties.load(new FileInputStream("data.properties"));
-//        } catch (IOException e) {
-//            logger.error(e.getLocalizedMessage());
-//            e.printStackTrace();
-//        }
-//
-//        for (String key : properties.stringPropertyNames()) {
-//            chatRooms.put(Long.getLong(key), (ChatRoom) properties.get(key));
-//        }
         try {
             FileInputStream fileInputStream = new FileInputStream(DB_FILE_NAME);
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
