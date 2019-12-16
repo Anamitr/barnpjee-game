@@ -1,0 +1,2 @@
+include ':app', ':hessianlib'
+rootProject.name='HessianChatClient'
