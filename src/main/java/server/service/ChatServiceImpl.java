@@ -32,6 +32,7 @@ public class ChatServiceImpl implements ChatService {
         if(newMessages.isEmpty()) {
             logger.info("No new messages");
         } else {
+            logger.info("lastMessageId = " + lastMessageId);
             logger.info("Found " + newMessages.size() + " new messages: " + newMessages.toString());
         }
         return newMessages;
