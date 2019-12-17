@@ -211,6 +211,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+        handler.removeCallbacks(checkForUpdatesRunnable)
     }
 
     class NewMessageEvent(val chatRoomId: Long, val newMessage: Message)
