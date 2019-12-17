@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTestData() {
-        usernameEditText.setText("Arystoteles")
-        chatIdEditText.setText("6")
+        usernameEditText.setText("Arystoteles") // Hektor Parystokles Arystoteles
+        chatIdEditText.setText("62")
     }
 
     fun startChatActivity(v: View) {
@@ -105,8 +105,8 @@ class MainActivity : AppCompatActivity() {
 
     fun testUpdatingMessages() {
         GlobalScope.launch {
-            val chatRoomId = 60L
-            val lastMessageId = 8L
+            val chatRoomId = 6L
+            val lastMessageId = 40L
             for (character in 'a'..'m') {
                 val message = Message(-1, "Kornelius", character.toString())
                 chatService.postMessage(chatRoomId, message)
