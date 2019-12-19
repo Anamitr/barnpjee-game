@@ -14,6 +14,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -32,11 +36,11 @@ class MainActivity : AppCompatActivity() {
         setTestData()
 
         val testButton = findViewById<Button>(R.id.test_button) as Button
-        testButton.setOnClickListener(View.OnClickListener { testUpdatingMessages() })
+        testButton.setOnClickListener(View.OnClickListener { testXmlRpc() })
     }
 
     private fun setTestData() {
-        usernameEditText.setText("Arystoteles") // Hektor Parystokles Arystoteles
+        usernameEditText.setText("Hektor") // Hektor Parystokles Arystoteles
         chatIdEditText.setText("62")
     }
 
@@ -47,6 +51,24 @@ class MainActivity : AppCompatActivity() {
             chatIdEditText.text.toString()
         )
         startActivity(intent)
+    }
+
+    fun testXmlRpc() {
+        GlobalScope.launch {
+            val config: XmlRpcClientConfigImpl = XmlRpcClientConfigImpl()
+            config.serverURL = URL(XMLRPC_CHAT_URL)
+            config.isEnabledForExtensions = true
+            val xmlRpcClient = XmlRpcClient()
+            xmlRpcClient.setConfig(config)
+
+            val chatService = XmlRpcChatService(xmlRpcClient)
+
+            Log.v(TAG, "XML-RPC test: ${chatService.getTestChatString("pastafarianizm")}")
+//            Log.v(TAG, "xml rpc : ${chatService.getAllMessages(66)}")
+
+
+
+        }
     }
 
     fun sendHessianBookingRequest() {

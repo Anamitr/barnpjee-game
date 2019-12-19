@@ -1,9 +1,9 @@
 package api.service;
 
-import java.util.List;
-
 import api.model.ChatRoom;
 import api.model.Message;
+
+import java.util.List;
 
 public interface ChatService {
 
@@ -12,5 +12,6 @@ public interface ChatService {
     Long postMessage(Long chatRoomId, Message message);
 
     List<Message> getMessagesUpdate(Long chatRoomId, Long lastMessageId);
-}
 
+    String getTestChatString(String testStringArgument);
+}
