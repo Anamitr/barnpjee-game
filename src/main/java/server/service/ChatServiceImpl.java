@@ -38,5 +38,10 @@ public class ChatServiceImpl implements ChatService {
         return newMessages;
     }
 
+    @Override
+    public String getTestChatString(String testStringArgument) {
+        return "XMLRPCTEST, argument was " + testStringArgument;
+    }
+
 
 }

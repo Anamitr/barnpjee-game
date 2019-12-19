@@ -13,7 +13,7 @@ public class ChatController {
     @RequestMapping("/")
     @ResponseBody
     String home() {
-        return "Welcome to Hessian Chat!";
+        return "Welcome to Xml-rpc/Hessian Chat!";
     }
 
     @PostMapping("/message/{chatRoomId}")

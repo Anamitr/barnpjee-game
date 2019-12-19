@@ -12,4 +12,6 @@ public interface ChatService {
     Long postMessage(Long chatRoomId, Message message);
 
     List<Message> getMessagesUpdate(Long chatRoomId, Long lastMessageId);
+
+    String getTestChatString(String testStringArgument);
 }
