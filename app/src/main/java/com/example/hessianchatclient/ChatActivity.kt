@@ -27,11 +27,13 @@ class ChatActivity : AppCompatActivity() {
 
         private val INTENT_USER_NAME = "INTENT_USER_NAME"
         private val INTENT_CHAT_NAME = "INTENT_CHAT_NAME"
+        private val INTENT_PROTOCOL = "INTENT_PROTOCOL"
 
-        fun newIntent(context: Context, userName: String, chatId: String): Intent {
+        fun newIntent(context: Context, userName: String, chatId: String, protocol: Protocol): Intent {
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(INTENT_USER_NAME, userName)
             intent.putExtra(INTENT_CHAT_NAME, chatId)
+            intent.putExtra(INTENT_PROTOCOL, protocol)
             return intent
         }
     }
@@ -39,6 +41,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var userName: String
     private var chatRoomId: Long = -1
     private var messageList: MutableList<Message> = ArrayList()
+    private var protocol: Protocol = Protocol.HESSIAN
 
     val hessianFactory: HessianProxyFactory = HessianProxyFactory()
     val chatService =
@@ -53,8 +56,10 @@ class ChatActivity : AppCompatActivity() {
 
         userName = intent.getStringExtra(INTENT_USER_NAME)
         chatRoomId = intent.getStringExtra(INTENT_CHAT_NAME).toLong()
+        protocol = intent.getSerializableExtra(INTENT_PROTOCOL) as Protocol
 
-        Toast.makeText(this, "$userName : $chatRoomId", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "$userName : $chatRoomId", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Protocol: $protocol", Toast.LENGTH_SHORT).show()
 
         recyclerview_message_list.apply {
             setHasFixedSize(true)

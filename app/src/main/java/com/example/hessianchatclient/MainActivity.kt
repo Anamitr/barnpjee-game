@@ -45,10 +45,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startChatActivity(v: View) {
+        val protocol = if(switch_protocol.isChecked) Protocol.XML_RPC else Protocol.HESSIAN
         val intent = ChatActivity.newIntent(
             this,
             usernameEditText.text.toString(),
-            chatIdEditText.text.toString()
+            chatIdEditText.text.toString(),
+            protocol
         )
         startActivity(intent)
     }

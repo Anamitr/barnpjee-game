@@ -35,23 +35,60 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:onClick="startChatActivity"
         android:text="Enter chat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/chatIdEditText"
         app:layout_constraintRight_toRightOf="@id/chatIdEditText"
-        app:layout_constraintTop_toBottomOf="@id/chatIdEditText"
-        android:onClick="startChatActivity"/>
+        app:layout_constraintTop_toBottomOf="@id/chatIdEditText" />
 
     <Button
         android:id="@+id/test_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/enterChatButton"
         android:text="Test button"
-        android:visibility="visible"/>
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/enterChatButton" />
+
+    <!--    <Switch-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:showText="true"-->
+    <!--        android:textOff="Hessian"-->
+    <!--        android:textOn="XML-RPC"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintRight_toRightOf="parent"-->
+    <!--        android:layout_marginBottom="20dp"/>-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hessian" />
+
+        <Switch
+            android:id="@+id/switch_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="Hessian"
+            android:textOn="XML-RPC" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XML-RPC" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-<!--        android:onClick="sendHessianRequest"/>-->
+    <!--        android:onClick="sendHessianRequest"/>-->
