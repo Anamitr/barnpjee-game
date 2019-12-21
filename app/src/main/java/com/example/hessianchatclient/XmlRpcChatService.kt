@@ -11,30 +11,60 @@ import java.net.URL
 import java.util.*
 
 
-class XmlRpcChatService(val xmlRpcClient : XmlRpcClient) : ChatService{
+class XmlRpcChatService(val xmlRpcClient: XmlRpcClient) : ChatService {
     companion object {
         val TAG = XmlRpcChatService::class.java.simpleName
     }
 
     override fun getAllMessages(chatRoomId: Long?): ChatRoom {
-        Log.v(TAG, "clientConfig.isEnabledForExtensions = ${xmlRpcClient.clientConfig.isEnabledForExtensions})")
-        xmlRpcClient.config.isEnabledForExtensions
-        xmlRpcClient.clientConfig.isEnabledForExtensions
-        return xmlRpcClient.execute("ChatService.getAllMessages", Collections.singletonList(chatRoomId)) as ChatRoom
+        try {
+            Log.v(
+                TAG,
+                "clientConfig.isEnabledForExtensions = ${xmlRpcClient.clientConfig.isEnabledForExtensions})"
+            )
+            xmlRpcClient.config.isEnabledForExtensions
+            xmlRpcClient.clientConfig.isEnabledForExtensions
+            return xmlRpcClient.execute(
+                "ChatService.getAllMessages",
+                Collections.singletonList(chatRoomId)
+            ) as ChatRoom
+        } catch (e: XmlRpcException) {
+            Log.e(TAG, e.localizedMessage)
+            return ChatRoom(-1)
+        }
     }
 
     override fun postMessage(chatRoomId: Long?, message: Message?): Long {
-        return xmlRpcClient.execute("ChatService.postMessage", listOf(chatRoomId, message)) as Long
+        try {
+            return xmlRpcClient.execute(
+                "ChatService.postMessage",
+                listOf(chatRoomId, message)
+            ) as Long
+        } catch (e: XmlRpcException) {
+            Log.e(TAG, e.localizedMessage)
+            return -1L
+        }
     }
 
     override fun getMessagesUpdate(chatRoomId: Long?, lastMessageId: Long?): MutableList<Message> {
-        return xmlRpcClient.execute("ChatService.getMessageUpdate", listOf(chatRoomId, lastMessageId)) as MutableList<Message>
+        try {
+            return xmlRpcClient.execute(
+                "ChatService.getMessageUpdate",
+                listOf(chatRoomId, lastMessageId)
+            ) as MutableList<Message>
+        } catch (e: XmlRpcException) {
+            Log.e(TAG, e.localizedMessage)
+            return mutableListOf()
+        }
     }
 
     override fun getTestChatString(testStringArgument: String): String {
         try {
-            return xmlRpcClient.execute("ChatService.getTestChatString", Collections.singletonList(testStringArgument)) as String
-        } catch (e : XmlRpcException) {
+            return xmlRpcClient.execute(
+                "ChatService.getTestChatString",
+                Collections.singletonList(testStringArgument)
+            ) as String
+        } catch (e: XmlRpcException) {
             Log.e(TAG, e.localizedMessage)
             return "error"
         }

@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             val chatService = XmlRpcChatService(xmlRpcClient)
 
             Log.v(TAG, "XML-RPC test: ${chatService.getTestChatString("pastafarianizm")}")
-//            Log.v(TAG, "xml rpc : ${chatService.getAllMessages(66)}")
+            Log.v(TAG, "xml rpc : ${chatService.getAllMessages(66)}")
 
 
 
