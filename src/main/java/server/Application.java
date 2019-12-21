@@ -6,6 +6,7 @@ import org.apache.xmlrpc.XmlRpcConfigImpl;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.metadata.XmlRpcSystemImpl;
 import org.apache.xmlrpc.server.XmlRpcServerConfig;
+import org.apache.xmlrpc.server.XmlRpcServerConfigImpl;
 import org.apache.xmlrpc.webserver.XmlRpcServletServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,18 +73,9 @@ public class Application {
         XmlRpcServletServer server = new XmlRpcServletServer();
         server.setHandlerMapping(handlerMapping);
 
-//        XmlRpcServerConfig config = new XmlRpcServerConfig() {
-//            @Override
-//            public boolean isEnabledForExtensions() {
-//                return true;
-//            }
-//
-//            @Override
-//            public TimeZone getTimeZone() {
-//                return null;
-//            }
-//        };
-//        server.setConfig(config);
+        XmlRpcServerConfigImpl config = new XmlRpcServerConfigImpl();
+        config.setEnabledForExtensions(true);
+        server.setConfig(config);
 
         logger.info("isEnabledForExtensions = " + server.getConfig().isEnabledForExtensions());
         return server::execute;
