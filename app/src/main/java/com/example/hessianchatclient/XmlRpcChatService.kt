@@ -46,12 +46,19 @@ class XmlRpcChatService(val xmlRpcClient: XmlRpcClient) : ChatService {
         }
     }
 
-    override fun getMessagesUpdate(chatRoomId: Long?, lastMessageId: Long?): MutableList<Message> {
+    override fun getMessagesUpdate(chatRoomId: Long?, lastMessageId: Long?): List<Message> {
         try {
-            return xmlRpcClient.execute(
-                "ChatService.getMessageUpdate",
+            val result = xmlRpcClient.execute(
+                "ChatService.getMessagesUpdate",
                 listOf(chatRoomId, lastMessageId)
-            ) as MutableList<Message>
+            ) as Array<*>
+            val messageList = ArrayList<Message>()
+
+            for(message in result) {
+                messageList.add(message as Message)
+            }
+
+            return messageList
         } catch (e: XmlRpcException) {
             Log.e(TAG, e.localizedMessage)
             return mutableListOf()

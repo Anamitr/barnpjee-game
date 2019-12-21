@@ -55,6 +55,9 @@ class MainActivity : AppCompatActivity() {
 
     fun testXmlRpc() {
         GlobalScope.launch {
+            val chatRoomId = 67L
+            val lastId = 9L
+
             val config: XmlRpcClientConfigImpl = XmlRpcClientConfigImpl()
             config.serverURL = URL(XMLRPC_CHAT_URL)
             config.isEnabledForExtensions = true
@@ -64,10 +67,12 @@ class MainActivity : AppCompatActivity() {
             val chatService = XmlRpcChatService(xmlRpcClient)
 
             Log.v(TAG, "XML-RPC test: ${chatService.getTestChatString("pastafarianizm")}")
-            Log.v(TAG, "xml rpc : ${chatService.getAllMessages(66)}")
-
-
-
+            for (character in 'a'..'m') {
+                val message = Message((character - 'a').toLong(), "Kornelius", character.toString())
+                chatService.postMessage(chatRoomId, message)
+            }
+            Log.v(TAG, "xml rpc : ${chatService.getAllMessages(chatRoomId)}")
+            Log.v(TAG, "messages from $lastId: ${chatService.getMessagesUpdate(chatRoomId, lastId)}")
         }
     }
 
