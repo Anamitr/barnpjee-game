@@ -17,8 +17,11 @@ import com.caucho.hessian.client.HessianProxyFactory
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.apache.xmlrpc.client.XmlRpcClient
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.net.URL
 
 
 class ChatActivity : AppCompatActivity() {
@@ -29,7 +32,12 @@ class ChatActivity : AppCompatActivity() {
         private val INTENT_CHAT_NAME = "INTENT_CHAT_NAME"
         private val INTENT_PROTOCOL = "INTENT_PROTOCOL"
 
-        fun newIntent(context: Context, userName: String, chatId: String, protocol: Protocol): Intent {
+        fun newIntent(
+            context: Context,
+            userName: String,
+            chatId: String,
+            protocol: Protocol
+        ): Intent {
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(INTENT_USER_NAME, userName)
             intent.putExtra(INTENT_CHAT_NAME, chatId)
@@ -43,9 +51,11 @@ class ChatActivity : AppCompatActivity() {
     private var messageList: MutableList<Message> = ArrayList()
     private var protocol: Protocol = Protocol.HESSIAN
 
-    val hessianFactory: HessianProxyFactory = HessianProxyFactory()
-    val chatService =
-        hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
+
+    private lateinit var chatService: ChatService
+
+//    val chatService =
+//        hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +70,8 @@ class ChatActivity : AppCompatActivity() {
 
 //        Toast.makeText(this, "$userName : $chatRoomId", Toast.LENGTH_SHORT).show()
         Toast.makeText(this, "Protocol: $protocol", Toast.LENGTH_SHORT).show()
+
+        createChatService()
 
         recyclerview_message_list.apply {
             setHasFixedSize(true)
@@ -81,6 +93,22 @@ class ChatActivity : AppCompatActivity() {
         scheduleChatSync()
 
         return
+    }
+
+    private fun createChatService() {
+        if (protocol == Protocol.HESSIAN) {
+            val hessianFactory: HessianProxyFactory = HessianProxyFactory()
+            chatService =
+                hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
+        } else {
+            val config: XmlRpcClientConfigImpl = XmlRpcClientConfigImpl()
+            config.serverURL = URL(XMLRPC_CHAT_URL)
+            config.isEnabledForExtensions = true
+            val xmlRpcClient = XmlRpcClient()
+            xmlRpcClient.setConfig(config)
+
+            chatService = XmlRpcChatService(xmlRpcClient)
+        }
     }
 
     fun generateSampleMessageList(): List<Message> {

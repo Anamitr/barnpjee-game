@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTestData() {
-        usernameEditText.setText("Hektor") // Hektor Parystokles Arystoteles
-        chatIdEditText.setText("62")
+        usernameEditText.setText("Achilles") // Hektor Achilles Parystokles Arystoteles
+        chatIdEditText.setText("60")
     }
 
     fun startChatActivity(v: View) {
