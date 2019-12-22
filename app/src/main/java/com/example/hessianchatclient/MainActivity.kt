@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import api.model.Message
 import api.service.CabBookingService
 import api.service.ChatService
+import com.caucho.burlap.client.BurlapProxyFactory
 import com.caucho.hessian.client.HessianProxyFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
@@ -15,8 +16,9 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl
 import java.net.URL
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         setTestData()
 
         val testButton = findViewById<Button>(R.id.test_button) as Button
-        testButton.setOnClickListener(View.OnClickListener { testXmlRpc() })
+        testButton.setOnClickListener(View.OnClickListener { testBurlap() })
     }
 
     private fun setTestData() {
@@ -53,6 +55,16 @@ class MainActivity : AppCompatActivity() {
             protocol
         )
         startActivity(intent)
+    }
+
+    fun testBurlap() {
+        GlobalScope.launch {
+            BurlapTest.runTestAndCatchException()
+
+        }
+/*        val burlapProxyFactory : BurlapProxyFactory = BurlapProxyFactory()
+        val chatService = burlapProxyFactory.create(ChatService::class.java, BURLAP_CHAT_URL) as ChatService
+        Log.v(TAG, "Burlap test: ${chatService.getTestChatString("burlap test Bioaron")}")*/
     }
 
     fun testXmlRpc() {
