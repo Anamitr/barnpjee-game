@@ -43,5 +43,10 @@ public class ChatServiceImpl implements ChatService {
         return "XMLRPCTEST, argument was " + testStringArgument;
     }
 
+    @Override
+    public String hello() {
+        return "Hello from Hessian/XML-RPC/Burlap server!";
+    }
+
 
 }

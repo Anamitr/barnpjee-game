@@ -1,6 +1,7 @@
 package server;
 
 import api.service.CabBookingService;
+import com.caucho.burlap.client.BurlapProxyFactory;
 import org.apache.xmlrpc.XmlRpcConfig;
 import org.apache.xmlrpc.XmlRpcConfigImpl;
 import org.apache.xmlrpc.XmlRpcException;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.caucho.HessianServiceExporter;
+import org.springframework.remoting.caucho.BurlapServiceExporter;
 import org.springframework.remoting.support.RemoteExporter;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 
@@ -57,6 +59,15 @@ public class Application {
     RemoteExporter hessianChatService() {
         logger.info("Starting hessian service");
         HessianServiceExporter exporter = new HessianServiceExporter();
+        exporter.setService(chatService());
+        exporter.setServiceInterface(ChatService.class);
+        return exporter;
+    }
+
+    @Bean(name = "/burlap_chat")
+    RemoteExporter burlapChatService() {
+        logger.info("Starting burlap service");
+        BurlapServiceExporter exporter = new BurlapServiceExporter();
         exporter.setService(chatService());
         exporter.setServiceInterface(ChatService.class);
         return exporter;

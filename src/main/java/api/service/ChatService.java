@@ -14,4 +14,6 @@ public interface ChatService {
     List<Message> getMessagesUpdate(Long chatRoomId, Long lastMessageId);
 
     String getTestChatString(String testStringArgument);
+
+    String hello();
 }
