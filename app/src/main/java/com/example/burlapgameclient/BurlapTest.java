@@ -11,7 +11,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import api.model.Message;
 import api.model.Minefield;
 import api.service.MinesweeperService;
 

@@ -1,11 +1,7 @@
 package api.service;
 
-import api.model.ChatRoom;
 import api.model.CheckFieldResponse;
-import api.model.Message;
 import api.model.Minefield;
-
-import java.util.List;
 
 public interface MinesweeperService {
 

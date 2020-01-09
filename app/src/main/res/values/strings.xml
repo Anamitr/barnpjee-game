@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Burlap Game Client</string>
+    <string name="title_activity_game">GameActivity</string>
 </resources>

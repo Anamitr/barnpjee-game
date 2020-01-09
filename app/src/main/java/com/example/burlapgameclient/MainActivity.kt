@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import api.service.ChatService
-import com.caucho.hessian.client.HessianProxyFactory
+import api.service.MinesweeperService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,10 +16,7 @@ class MainActivity : AppCompatActivity() {
         val TAG = MainActivity::class.java.simpleName
     }
 
-
-    val hessianFactory: HessianProxyFactory = HessianProxyFactory()
-    val chatService =
-        hessianFactory.create(ChatService::class.java, HESSIAN_CHAT_URL) as ChatService
+    val minesweeperService : MinesweeperService = BurlapMinesweeperService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +30,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setTestData() {
         usernameEditText.setText("Achilles") // Hektor Achilles Parystokles Arystoteles
-        chatIdEditText.setText("60")
+        gameIdEditText.setText("60")
     }
 
-    fun startChatActivity(v: View) {
+    fun startGameActivity(v: View) {
+        GlobalScope.launch {
+            val minefield = minesweeperService.getMinefield(gameIdEditText.toString())
+
+            val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield)
+            this@MainActivity.startActivity(intent)
+
+        }
+
 //        val intent = ChatActivity.newIntent(
 //            this,
 //            usernameEditText.text.toString(),
@@ -49,9 +54,6 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch {
             BurlapTest.runSomeTests()
         }
-/*        val burlapProxyFactory : BurlapProxyFactory = BurlapProxyFactory()
-        val chatService = burlapProxyFactory.create(ChatService::class.java, BURLAP_CHAT_URL) as ChatService
-        Log.v(TAG, "Burlap testRigidly: ${chatService.getTestChatString("burlap testRigidly Bioaron")}")*/
     }
 
 }

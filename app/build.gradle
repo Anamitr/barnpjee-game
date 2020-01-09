@@ -32,9 +32,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.testRigidly.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.testRigidly.espresso:espresso-core:3.1.1'
     //    implementation group: 'com.caucho', name: 'hessian', version: '4.0.63'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
 //    implementation project(':hessianlib')

@@ -64,7 +64,6 @@ public class BurlapMinesweeperService implements MinesweeperService {
             }
         }
 
-
         minefield.setFieldsMatrix(Collections.list(((Vector)hashtable.get("fieldsMatrix")).elements()));
 
         return minefield;

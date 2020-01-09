@@ -12,35 +12,35 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Username"
-        app:layout_constraintBottom_toTopOf="@+id/chatIdEditText"
+        app:layout_constraintBottom_toTopOf="@+id/gameIdEditText"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <EditText
-        android:id="@+id/chatIdEditText"
+        android:id="@+id/gameIdEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Chat id"
+        android:hint="Game id"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/enterChatButton"
+        app:layout_constraintBottom_toTopOf="@+id/enterGameButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/enterChatButton"
+        android:id="@+id/enterGameButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:onClick="startChatActivity"
-        android:text="Enter chat"
+        android:onClick="startGameActivity"
+        android:text="Enter game"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/chatIdEditText"
-        app:layout_constraintRight_toRightOf="@id/chatIdEditText"
-        app:layout_constraintTop_toBottomOf="@id/chatIdEditText" />
+        app:layout_constraintLeft_toLeftOf="@id/gameIdEditText"
+        app:layout_constraintRight_toRightOf="@id/gameIdEditText"
+        app:layout_constraintTop_toBottomOf="@id/gameIdEditText" />
 
     <Button
         android:id="@+id/test_button"
@@ -48,10 +48,6 @@
         android:layout_height="wrap_content"
         android:text="Test button"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/enterChatButton" />
-
+        app:layout_constraintTop_toBottomOf="@id/enterGameButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!--        android:onClick="sendHessianRequest"/>-->
