@@ -11,6 +11,12 @@ public interface MinesweeperService {
 
     String hello();
 
+    String getTestChatString(String argument);
+
+    Message getTestMessage();
+
+    Minefield getTestMinefield();
+
     int enterMineField(String username, String minefieldName);
 
     CheckFieldResponse checkField(int x, int y);

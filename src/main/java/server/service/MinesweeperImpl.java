@@ -8,20 +8,38 @@ import org.slf4j.LoggerFactory;
 import server.ChatRepository;
 import api.model.ChatRoom;
 import api.model.Message;
+import server.MinesweeperRepository;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 public class MinesweeperImpl implements MinesweeperService {
 
     Logger logger = LoggerFactory.getLogger(MinesweeperImpl.class);
 
-    ChatRepository chatRepository = ChatRepository.getInstance();
-
+    MinesweeperRepository minesweeperRepository = MinesweeperRepository.getInstance();
 
 
     @Override
     public String hello() {
         return "Hello from Burlap Minesweeper server!";
+    }
+
+    @Override
+    public String getTestChatString(String argument) {
+        String response = "getTestChatString was call with argument: " + argument;
+        logger.info("getTestChatString return: " + response);
+        return response;
+    }
+
+    @Override
+    public Message getTestMessage() {
+        return new Message(-1L, "test_message", "test content");
+    }
+
+    @Override
+    public Minefield getTestMinefield() {
+        return new Minefield("test_minefield");
     }
 
     @Override
@@ -36,8 +54,11 @@ public class MinesweeperImpl implements MinesweeperService {
 
     @Override
     public Minefield getMinefield(String minefieldId) {
-        return null;
+        Minefield minefield = minesweeperRepository.getMinefield(minefieldId);
+        logger.info("getMinefield: " + minefield.toString());
+//        return minefield;
+//        return new Minefield("horytnica");
+        return minefield;
     }
-
 
 }
