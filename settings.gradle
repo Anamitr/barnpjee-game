@@ -1,2 +1,2 @@
 include ':app', ':hessianlib'
-rootProject.name='HessianChatClient'
+rootProject.name='BurlapGameClient'

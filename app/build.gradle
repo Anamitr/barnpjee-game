@@ -8,12 +8,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.example.hessianchatclient"
+        applicationId "com.example.burlapgameclient"
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.testRigidly.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -33,8 +33,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.testRigidly.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.testRigidly.espresso:espresso-core:3.1.1'
     //    implementation group: 'com.caucho', name: 'hessian', version: '4.0.63'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3'
 //    implementation project(':hessianlib')

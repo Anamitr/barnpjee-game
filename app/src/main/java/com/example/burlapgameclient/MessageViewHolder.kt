@@ -1,4 +1,4 @@
-package com.example.hessianchatclient
+package com.example.burlapgameclient
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

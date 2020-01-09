@@ -1,4 +1,4 @@
-package com.example.hessianchatclient
+package com.example.burlapgameclient
 
 import android.util.Log
 import api.model.ChatRoom
@@ -6,8 +6,6 @@ import api.model.Message
 import api.service.ChatService
 import org.apache.xmlrpc.XmlRpcException
 import org.apache.xmlrpc.client.XmlRpcClient
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl
-import java.net.URL
 import java.util.*
 
 

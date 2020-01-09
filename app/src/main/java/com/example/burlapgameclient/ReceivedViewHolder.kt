@@ -1,12 +1,4 @@
-package com.example.hessianchatclient
-
-import android.R
-import android.graphics.Bitmap
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import api.model.Message
+package com.example.burlapgameclient
 
 
 //class ReceivedMessageHolder internal constructor(itemView: View) :

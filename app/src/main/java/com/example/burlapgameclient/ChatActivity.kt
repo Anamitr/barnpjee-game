@@ -1,4 +1,4 @@
-package com.example.hessianchatclient
+package com.example.burlapgameclient
 
 import android.content.Context
 import android.content.Intent
