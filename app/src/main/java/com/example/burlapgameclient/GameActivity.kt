@@ -59,6 +59,8 @@ class GameActivity : AppCompatActivity() {
         drawMinefieldGridLayout()
 
 
+
+
     }
 
     private fun drawMinefieldGridLayout() {
@@ -92,10 +94,22 @@ class GameActivity : AppCompatActivity() {
                         layoutParams.setMargins(margin, margin, margin, margin)
                         this.layoutParams = layoutParams
 
-                        setOnClickListener(View.OnClickListener { v -> buttonClick(v as Button, i, j) })
+                        setOnClickListener(View.OnClickListener { v ->
+                            buttonClick(
+                                v as Button,
+                                i,
+                                j
+                            )
+                        })
                     }
                     minefieldGridLayout.addView(fieldButton)
                 }
+
+            if (minefield.isGameOver) {
+                val bombButton = minefieldGridLayout.getChildAt(minefield.detonatedBombPosition)
+                bombButton.setBackgroundResource(R.mipmap.bomb)
+                setGameOver()
+            }
         }
 
     }
@@ -112,7 +126,12 @@ class GameActivity : AppCompatActivity() {
                 }
                 CheckFieldResponse.BOMB -> {
                     Log.v(TAG, "Detonated a bomb!")
-                    EventBus.getDefault().post(CustomApplication.ToastEvent("Detonated a bomb!", Toast.LENGTH_LONG))
+                    EventBus.getDefault().post(
+                        CustomApplication.ToastEvent(
+                            "Detonated a bomb!",
+                            Toast.LENGTH_LONG
+                        )
+                    )
                     handleBomDetonation(x, y)
 //                    button.setBackgroundResource(R.mipmap.bomb)
 //                    this
@@ -122,24 +141,31 @@ class GameActivity : AppCompatActivity() {
                     minefield = minesweeperService.getMinefield(minefield.id)
                     drawMinefieldGridLayout()
                 }
+                CheckFieldResponse.GAME_IS_OVER -> {
+                    setGameOver()
+                }
+
             }
         }
 
     }
 
-    private fun handleBomDetonation(x : Int, y : Int) {
+    private fun handleBomDetonation(x: Int, y: Int) {
         GlobalScope.launch(Dispatchers.Main) {
-            val bombButton = minefieldGridLayout.getChildAt(x* MINEFIELD_WIDTH + y)
+            val bombButton = minefieldGridLayout.getChildAt(x * MINEFIELD_WIDTH + y)
             bombButton.setBackgroundResource(R.mipmap.bomb)
+            setGameOver()
+        }
+    }
 
+    private fun setGameOver() {
+        GlobalScope.launch(Dispatchers.Main) {
+            infoTextView.text = "Game over!"
             val count = minefieldGridLayout.childCount
-            for(i in 0 until count) {
+            for (i in 0 until count) {
                 minefieldGridLayout[i].isClickable = false
             }
-1
         }
-
-
     }
 
     private fun getTextFromPositon(i: Int, j: Int): CharSequence? {

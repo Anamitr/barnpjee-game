@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setTestData() {
         usernameEditText.setText("Achilles") // Hektor Achilles Parystokles Arystoteles
-        gameIdEditText.setText("60")
+        gameIdEditText.setText("1")
     }
 
     fun startGameActivity(v: View) {
