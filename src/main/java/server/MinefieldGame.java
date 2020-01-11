@@ -28,6 +28,8 @@ public class MinefieldGame implements Serializable {
     boolean[][] revealed; // entry is true if that spot is revealed
 
     boolean firstClick = true;
+    boolean gameOver = false;
+    int detonatedBombPositon = -1;
 
     List<String> players = new ArrayList<>();
     String currentPlayer = null;
@@ -47,6 +49,8 @@ public class MinefieldGame implements Serializable {
             } while (calcNear(x, y) != 0);
         }
         if (mines[x][y] != 0) {
+            gameOver = true;
+            detonatedBombPositon = x*gridW + y;
             return CheckFieldResponse.BOMB;
         } else {
             reveal(x, y);
@@ -56,6 +60,9 @@ public class MinefieldGame implements Serializable {
     }
 
     CheckFieldResponse checkFieldWithUser(String userName, int x, int y) {
+        if(gameOver) {
+            return CheckFieldResponse.GAME_IS_OVER;
+        }
         if(!players.contains(userName)) {
             players.add(userName);
         }
@@ -81,6 +88,8 @@ public class MinefieldGame implements Serializable {
     Minefield getMinefield() {
 
         Minefield result = new Minefield(name);
+        result.setGameOver(gameOver);
+        result.setDetonatedBombPosition(detonatedBombPositon);
 //        result.mines = mines.clone();
 //        result.revealed = revealed.clone();
         List<List<FieldType>> fieldMatrix = MinesweeperUtils.generateEmptyMinefield();
