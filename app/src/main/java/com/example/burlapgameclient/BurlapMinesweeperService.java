@@ -42,21 +42,24 @@ public class BurlapMinesweeperService implements MinesweeperService {
 
     @Override
     public CheckFieldResponse checkField(int x, int y) {
-        return null;
+        Hashtable hashtable = (Hashtable) sendBurlapRequest("checkField",
+                new Object[]{x, y}, CheckFieldResponse.class);
+        CheckFieldResponse checkFieldResponse = CheckFieldResponse.valueOf(hashtable.get("name").toString());
+        return checkFieldResponse;
     }
 
     @Override
     public Minefield getMinefield(String minefieldId) {
         Minefield minefield = new Minefield();
         Hashtable hashtable = (Hashtable) sendBurlapRequest("POST", "getMinefield",
-               new Object[]{"sdfagfasd"}, Minefield.class);
-        minefield.setId((String)hashtable.get("id"));
+                new Object[]{minefieldId}, Minefield.class);
+        minefield.setId((String) hashtable.get("id"));
 
         minefield.setFieldsMatrix(generateEmptyMinefield());
-        List<Vector> downloadedFields = Collections.list(((Vector)hashtable.get("fieldsMatrix")).elements());
-        for(int i = 0; i < downloadedFields.size(); i++) {
+        List<Vector> downloadedFields = Collections.list(((Vector) hashtable.get("fieldsMatrix")).elements());
+        for (int i = 0; i < downloadedFields.size(); i++) {
             Vector vector = downloadedFields.get(i);
-            for(int j = 0; j < vector.size(); j++) {
+            for (int j = 0; j < vector.size(); j++) {
                 Hashtable fieldTypeHashTable = (Hashtable) vector.get(j);
                 minefield.getFieldsMatrix().get(i).get(j).setBomb((Boolean) fieldTypeHashTable.get("isBomb"));
                 minefield.getFieldsMatrix().get(i).get(j).setRevealed((Boolean) fieldTypeHashTable.get("isRevealed"));

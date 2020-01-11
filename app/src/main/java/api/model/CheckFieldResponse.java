@@ -1,5 +1,5 @@
 package api.model;
 
 public enum CheckFieldResponse {
-    OK, BOMB
+    OK, BOMB, NOT_YOUR_TURN
 }

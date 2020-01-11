@@ -35,19 +35,12 @@ class MainActivity : AppCompatActivity() {
 
     fun startGameActivity(v: View) {
         GlobalScope.launch {
-            val minefield = minesweeperService.getMinefield(gameIdEditText.toString())
+            val minefield = minesweeperService.getMinefield(gameIdEditText.text.toString())
 
             val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield)
             this@MainActivity.startActivity(intent)
 
         }
-
-//        val intent = ChatActivity.newIntent(
-//            this,
-//            usernameEditText.text.toString(),
-//            chatIdEditText.text.toString()
-//        )
-//        startActivity(intent)
     }
 
     fun testBurlap() {
