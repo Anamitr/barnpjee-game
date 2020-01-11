@@ -8,12 +8,11 @@ import api.model.FieldType;
 import api.model.Minefield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.service.MinesweeperImpl;
 
 import java.io.Serializable;
-import java.util.*;
-
-import static jdk.nashorn.internal.objects.NativeMath.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MinefieldGame implements Serializable {
     Logger logger = LoggerFactory.getLogger(MinefieldGame.class);
@@ -22,13 +21,16 @@ public class MinefieldGame implements Serializable {
 
     int gridW = MinefieldConst.MINEFIELD_WIDTH; // grid width
     int gridH = MinefieldConst.MINEFIELD_HEIGHT; // grid height
-    int numMines = 10; // number of mines on the board
+    int numOfFields = gridW * gridH;
+    int numMines = 5; // number of mines on the board
     int[][] mines; // entry is 1 for having a mine and 0 for not
     boolean[][] flags; // entry is true if you have flagged that spot
     boolean[][] revealed; // entry is true if that spot is revealed
+    int numOfRevealed = 0;
 
     boolean firstClick = true;
     boolean gameOver = false;
+    boolean wasGameWon = false;
     int detonatedBombPositon = -1;
 
     List<String> players = new ArrayList<>();
@@ -54,14 +56,23 @@ public class MinefieldGame implements Serializable {
             return CheckFieldResponse.BOMB;
         } else {
             reveal(x, y);
+            logger.info("After checkField: numOfRevealed = " + numOfRevealed + ", numMines = " + numMines + ", numOfFields = " + numOfFields);
+            if(numOfRevealed + numMines == numOfFields) {
+                wasGameWon = true;
+                gameOver = true;
+                return CheckFieldResponse.GAME_WON;
+            }
+            return CheckFieldResponse.OK;
         }
-        logger.info("After checkField:\n" + mines);
-        return CheckFieldResponse.OK;
     }
 
     CheckFieldResponse checkFieldWithUser(String userName, int x, int y) {
         if(gameOver) {
-            return CheckFieldResponse.GAME_IS_OVER;
+            if(wasGameWon) {
+                return CheckFieldResponse.GAME_WON;
+            } else {
+                return CheckFieldResponse.GAME_IS_OVER;
+            }
         }
         if(!players.contains(userName)) {
             players.add(userName);
@@ -90,6 +101,7 @@ public class MinefieldGame implements Serializable {
         Minefield result = new Minefield(name);
         result.setGameOver(gameOver);
         result.setDetonatedBombPosition(detonatedBombPositon);
+        result.setWasGameWon(wasGameWon);
 //        result.mines = mines.clone();
 //        result.revealed = revealed.clone();
         List<List<FieldType>> fieldMatrix = MinesweeperUtils.generateEmptyMinefield();
@@ -191,6 +203,7 @@ public class MinefieldGame implements Serializable {
         if (outBounds(x, y)) return;
         if (revealed[x][y]) return;
         revealed[x][y] = true;
+        numOfRevealed++;
         if (calcNear(x, y) != 0) return;
         reveal(x - 1, y - 1);
         reveal(x - 1, y + 1);

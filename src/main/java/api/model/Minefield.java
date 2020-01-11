@@ -10,6 +10,7 @@ public class Minefield implements Serializable {
     List<String> players;
     int detonatedBombPosition = -1;
     boolean gameOver = false;
+    boolean wasGameWon = false;
 
     public Minefield() {
         fieldsMatrix = new ArrayList<>();
@@ -60,6 +61,14 @@ public class Minefield implements Serializable {
 
     public void setDetonatedBombPosition(int detonatedBombPosition) {
         this.detonatedBombPosition = detonatedBombPosition;
+    }
+
+    public boolean isWasGameWon() {
+        return wasGameWon;
+    }
+
+    public void setWasGameWon(boolean wasGameWon) {
+        this.wasGameWon = wasGameWon;
     }
 
     @Override
