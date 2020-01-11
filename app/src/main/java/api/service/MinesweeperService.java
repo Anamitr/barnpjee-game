@@ -16,4 +16,6 @@ public interface MinesweeperService {
     CheckFieldResponse checkField(String minefieldId, String username, int x, int y);
 
     Minefield getMinefield (String minefieldId);
+
+    String getCurrentPlayer(String minefieldId);
 }

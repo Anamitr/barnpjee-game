@@ -56,7 +56,7 @@ class GameActivity : AppCompatActivity() {
         username = intent.getStringExtra(INTENT_USERNAME)
 
         drawMinefieldGridLayout()
-
+        fetchCurrentPlayer()
     }
 
     private fun drawMinefieldGridLayout() {
@@ -112,6 +112,7 @@ class GameActivity : AppCompatActivity() {
     private fun buttonClick(button: Button, x: Int, y: Int) {
         GlobalScope.launch {
             val checkFieldResponse = minesweeperService.checkField(minefield.id, username, x, y)
+            fetchCurrentPlayer()
             Log.v(TAG, "checkField($x, $y) = $checkFieldResponse")
             when (checkFieldResponse) {
                 CheckFieldResponse.NOT_YOUR_TURN -> {
@@ -146,8 +147,8 @@ class GameActivity : AppCompatActivity() {
                     drawMinefieldGridLayout()
                     handleGameWon()
                 }
-
             }
+
         }
 
     }
@@ -185,6 +186,19 @@ class GameActivity : AppCompatActivity() {
         val count = minefieldGridLayout.childCount
         for (i in 0 until count) {
             minefieldGridLayout[i].isClickable = false
+        }
+    }
+
+    private fun fetchCurrentPlayer() {
+        GlobalScope.launch {
+            val fetchCurrentPlayerResult = minesweeperService.getCurrentPlayer(minefield.id)
+            setCurrentPlayerLabel(fetchCurrentPlayerResult)
+        }
+    }
+
+    private fun setCurrentPlayerLabel(username: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            infoTextView.text = "Current player: $username"
         }
     }
 
