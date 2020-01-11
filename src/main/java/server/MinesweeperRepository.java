@@ -1,5 +1,6 @@
 package server;
 
+import api.model.CheckFieldResponse;
 import api.model.Minefield;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,7 @@ public class MinesweeperRepository {
     Logger logger = LoggerFactory.getLogger(MinesweeperRepository.class);
     private static final String DB_FILE_NAME = "minefields.ser";
 
-    Map<String, Minefield> minefields = new HashMap<>();
+    Map<String, MinefieldGame> minefields = new HashMap<>();
 
     MinesweeperRepository() { loadMinefields(); }
 
@@ -26,13 +27,17 @@ public class MinesweeperRepository {
     }
 
     public Minefield getMinefield(String minefieldName) {
-//        Minefield minefield = minefields.get(minefieldName);
-//        if(minefield == null) {
-//            minefield = new Minefield(minefieldName);
-//        }
-        MinefieldGame minefieldGame = new MinefieldGame(minefieldName);
-
+        MinefieldGame minefieldGame = getMinefieldGame(minefieldName);
         return minefieldGame.getMinefield();
+    }
+
+    public MinefieldGame getMinefieldGame(String minefieldName) {
+        MinefieldGame minefieldGame = minefields.get(minefieldName);
+        if(minefieldGame == null) {
+            minefieldGame = new MinefieldGame(minefieldName);
+            minefields.put(minefieldName, minefieldGame);
+        }
+        return minefieldGame;
     }
 
     private static MinesweeperRepository instance;
@@ -42,5 +47,10 @@ public class MinesweeperRepository {
             instance = new MinesweeperRepository();
         }
         return instance;
+    }
+
+    public CheckFieldResponse checkFieldResponse(String minefieldName, String userName, int x, int y) {
+        MinefieldGame minefieldGame = getMinefieldGame(minefieldName);
+        return minefieldGame.checkFieldWithUser(userName, x, y);
     }
 }

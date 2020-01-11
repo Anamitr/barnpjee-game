@@ -3,6 +3,7 @@ package server;
 //import Math
 
 import api.exception.MinefieldConst;
+import api.model.CheckFieldResponse;
 import api.model.FieldType;
 import api.model.Minefield;
 import org.slf4j.Logger;
@@ -10,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import server.service.MinesweeperImpl;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static jdk.nashorn.internal.objects.NativeMath.*;
 
@@ -30,13 +29,16 @@ public class MinefieldGame implements Serializable {
 
     boolean firstClick = true;
 
+    List<String> players = new ArrayList<>();
+    String currentPlayer = null;
+
     public MinefieldGame(String name) {
         this.name = name;
         setup();
         checkField(0, 0);
     }
 
-    MinefieldGame checkField(int x, int y) {
+    CheckFieldResponse checkField(int x, int y) {
         if (firstClick) {
             firstClick = false;
             do {
@@ -45,16 +47,39 @@ public class MinefieldGame implements Serializable {
             } while (calcNear(x, y) != 0);
         }
         if (mines[x][y] != 0) {
-            return null;
+            return CheckFieldResponse.BOMB;
         } else {
             reveal(x, y);
         }
         logger.info("After checkField:\n" + mines);
-        return this;
+        return CheckFieldResponse.OK;
+    }
+
+    CheckFieldResponse checkFieldWithUser(String userName, int x, int y) {
+        if(!players.contains(userName)) {
+            players.add(userName);
+        }
+        if(currentPlayer == null) {
+            currentPlayer = userName;
+        }
+
+        if(!userName.equals(currentPlayer)) {
+            return CheckFieldResponse.NOT_YOUR_TURN;
+        }
+        nextPlayer();
+        return checkField(y, x);
+    }
+
+    private void nextPlayer() {
+        int nextPlayerIndex = players.indexOf(currentPlayer) + 1;
+        if (nextPlayerIndex == players.size()) {
+            nextPlayerIndex = 0;
+        }
+        currentPlayer = players.get(nextPlayerIndex);
     }
 
     Minefield getMinefield() {
-        logger.info("getMinefield");
+
         Minefield result = new Minefield(name);
 //        result.mines = mines.clone();
 //        result.revealed = revealed.clone();
@@ -73,6 +98,7 @@ public class MinefieldGame implements Serializable {
             }
         }
         result.setFieldsMatrix(fieldMatrix);
+        logger.info("getMinefield: " + result.toString());
         return result;
     }
 

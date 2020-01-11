@@ -33,11 +33,6 @@ public class MinesweeperImpl implements MinesweeperService {
     }
 
     @Override
-    public Message getTestMessage() {
-        return new Message(-1L, "test_message", "test content");
-    }
-
-    @Override
     public Minefield getTestMinefield() {
         return new Minefield("test_minefield");
     }
@@ -48,14 +43,16 @@ public class MinesweeperImpl implements MinesweeperService {
     }
 
     @Override
-    public CheckFieldResponse checkField(int x, int y) {
-        return null;
+    public CheckFieldResponse checkField(String minefieldId, String username, int x, int y) {
+        CheckFieldResponse checkFieldResponse = minesweeperRepository.checkFieldResponse(minefieldId, username, x, y);
+        logger.info("checkField(" + x + "," + y + ") = " + checkFieldResponse.name());
+        return checkFieldResponse;
     }
 
     @Override
     public Minefield getMinefield(String minefieldId) {
         Minefield minefield = minesweeperRepository.getMinefield(minefieldId);
-        logger.info("getMinefield: " + minefield.toString());
+        logger.info("getMinefield(" + minefieldId + ")");
 //        return minefield;
 //        return new Minefield("horytnica");
         return minefield;
