@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import androidx.core.view.get
 import api.exception.MinefieldConst.MINEFIELD_HEIGHT
 import api.exception.MinefieldConst.MINEFIELD_WIDTH
@@ -58,21 +57,13 @@ class GameActivity : AppCompatActivity() {
 
         drawMinefieldGridLayout()
 
-
-
-
     }
 
     private fun drawMinefieldGridLayout() {
-//        minefieldGridLayout.rowCount = MINEFIELD_HEIGHT
-//        minefieldGridLayout.columnCount = MINEFIELD_WIDTH
-
         GlobalScope.launch(Dispatchers.Main) {
             minefieldGridLayout.removeAllViews()
             for (i in 0 until MINEFIELD_HEIGHT)
                 for (j in 0 until MINEFIELD_WIDTH) {
-//                val textView = TextView(this)
-//                textView.text = "$i - $j"
                     val fieldButton = Button(this@GameActivity).apply {
                         val fieldType = minefield.fieldsMatrix[i][j]
                         if (fieldType.isRevealed) {
@@ -106,9 +97,13 @@ class GameActivity : AppCompatActivity() {
                 }
 
             if (minefield.isGameOver) {
-                val bombButton = minefieldGridLayout.getChildAt(minefield.detonatedBombPosition)
-                bombButton.setBackgroundResource(R.mipmap.bomb)
-                setGameOver()
+                if(minefield.isWasGameWon) {
+                    setGameWon()
+                } else {
+                    val bombButton = minefieldGridLayout.getChildAt(minefield.detonatedBombPosition)
+                    bombButton.setBackgroundResource(R.mipmap.bomb)
+                    setGameOver()
+                }
             }
         }
 
@@ -142,7 +137,14 @@ class GameActivity : AppCompatActivity() {
                     drawMinefieldGridLayout()
                 }
                 CheckFieldResponse.GAME_IS_OVER -> {
+                    minefield = minesweeperService.getMinefield(minefield.id)
+                    drawMinefieldGridLayout()
                     setGameOver()
+                }
+                CheckFieldResponse.GAME_WON -> {
+                    minefield = minesweeperService.getMinefield(minefield.id)
+                    drawMinefieldGridLayout()
+                    handleGameWon()
                 }
 
             }
@@ -161,10 +163,28 @@ class GameActivity : AppCompatActivity() {
     private fun setGameOver() {
         GlobalScope.launch(Dispatchers.Main) {
             infoTextView.text = "Game over!"
-            val count = minefieldGridLayout.childCount
-            for (i in 0 until count) {
-                minefieldGridLayout[i].isClickable = false
-            }
+            setAllFieldUnclickabe()
+        }
+    }
+
+    private fun handleGameWon() {
+        GlobalScope.launch(Dispatchers.Main) {
+            EventBus.getDefault().post(CustomApplication.ToastEvent("Game Won!", Toast.LENGTH_LONG))
+            setGameWon()
+        }
+    }
+
+    private fun setGameWon() {
+        GlobalScope.launch(Dispatchers.Main) {
+            infoTextView.text = "Game won!"
+            setAllFieldUnclickabe()
+        }
+    }
+
+    private fun setAllFieldUnclickabe() {
+        val count = minefieldGridLayout.childCount
+        for (i in 0 until count) {
+            minefieldGridLayout[i].isClickable = false
         }
     }
 

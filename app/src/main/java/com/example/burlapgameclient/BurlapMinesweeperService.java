@@ -58,6 +58,7 @@ public class BurlapMinesweeperService implements MinesweeperService {
                 new Object[]{minefieldId}, Minefield.class);
         minefield.setId((String) hashtable.get("id"));
         minefield.setGameOver((boolean) hashtable.get("gameOver"));
+        minefield.setWasGameWon((boolean) hashtable.get("wasGameWon"));
         minefield.setDetonatedBombPosition((int)hashtable.get("detonatedBombPosition"));
 
         minefield.setFieldsMatrix(generateEmptyMinefield());
