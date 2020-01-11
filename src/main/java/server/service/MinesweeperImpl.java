@@ -58,4 +58,12 @@ public class MinesweeperImpl implements MinesweeperService {
         return minefield;
     }
 
+    @Override
+    public String getCurrentPlayer(String minefieldId) {
+        String userName = minesweeperRepository.getCurrentPlayer(minefieldId);
+
+        return userName;
+    }
+
+
 }

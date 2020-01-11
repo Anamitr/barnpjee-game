@@ -22,7 +22,7 @@ public class MinefieldGame implements Serializable {
     int gridW = MinefieldConst.MINEFIELD_WIDTH; // grid width
     int gridH = MinefieldConst.MINEFIELD_HEIGHT; // grid height
     int numOfFields = gridW * gridH;
-    int numMines = 5; // number of mines on the board
+    int numMines = 10; // number of mines on the board
     int[][] mines; // entry is 1 for having a mine and 0 for not
     boolean[][] flags; // entry is true if you have flagged that spot
     boolean[][] revealed; // entry is true if that spot is revealed
@@ -94,6 +94,14 @@ public class MinefieldGame implements Serializable {
             nextPlayerIndex = 0;
         }
         currentPlayer = players.get(nextPlayerIndex);
+    }
+
+    public String getCurrentPlayer() {
+        if(currentPlayer == null) {
+            return "Awaiting for players";
+        } else {
+            return currentPlayer;
+        }
     }
 
     Minefield getMinefield() {
@@ -176,8 +184,8 @@ public class MinefieldGame implements Serializable {
             }
         }
     }
-
     //Place numMines mines on the grid
+
     void placeMines() {
         int i = 0;
         Random random = new Random();
@@ -189,8 +197,8 @@ public class MinefieldGame implements Serializable {
             i++;
         }
     }
-
     //Clear the mines
+
     void clearMines() {
         for (int x = 0; x < gridW; x++) {
             for (int y = 0; y < gridH; y++) {
