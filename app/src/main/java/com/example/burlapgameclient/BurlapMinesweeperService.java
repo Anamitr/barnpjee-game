@@ -9,14 +9,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
 import api.model.CheckFieldResponse;
-import api.model.FieldType;
 import api.model.Minefield;
 import api.service.MinesweeperService;
 

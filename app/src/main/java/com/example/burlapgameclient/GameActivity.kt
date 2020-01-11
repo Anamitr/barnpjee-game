@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
+import androidx.core.view.get
 import api.exception.MinefieldConst.MINEFIELD_HEIGHT
 import api.exception.MinefieldConst.MINEFIELD_WIDTH
 import api.model.CheckFieldResponse
@@ -64,6 +66,7 @@ class GameActivity : AppCompatActivity() {
 //        minefieldGridLayout.columnCount = MINEFIELD_WIDTH
 
         GlobalScope.launch(Dispatchers.Main) {
+            minefieldGridLayout.removeAllViews()
             for (i in 0 until MINEFIELD_HEIGHT)
                 for (j in 0 until MINEFIELD_WIDTH) {
 //                val textView = TextView(this)
@@ -89,7 +92,7 @@ class GameActivity : AppCompatActivity() {
                         layoutParams.setMargins(margin, margin, margin, margin)
                         this.layoutParams = layoutParams
 
-                        setOnClickListener(View.OnClickListener { v -> buttonClick(i, j) })
+                        setOnClickListener(View.OnClickListener { v -> buttonClick(v as Button, i, j) })
                     }
                     minefieldGridLayout.addView(fieldButton)
                 }
@@ -97,10 +100,10 @@ class GameActivity : AppCompatActivity() {
 
     }
 
-    private fun buttonClick(i: Int, j: Int) {
+    private fun buttonClick(button: Button, x: Int, y: Int) {
         GlobalScope.launch {
-            val checkFieldResponse = minesweeperService.checkField(minefield.id, username, i, j)
-            Log.v(TAG, "checkField($i, $j) = $checkFieldResponse")
+            val checkFieldResponse = minesweeperService.checkField(minefield.id, username, x, y)
+            Log.v(TAG, "checkField($x, $y) = $checkFieldResponse")
             when (checkFieldResponse) {
                 CheckFieldResponse.NOT_YOUR_TURN -> {
                     Log.v(TAG, "Not your turn!")
@@ -110,6 +113,9 @@ class GameActivity : AppCompatActivity() {
                 CheckFieldResponse.BOMB -> {
                     Log.v(TAG, "Detonated a bomb!")
                     EventBus.getDefault().post(CustomApplication.ToastEvent("Detonated a bomb!", Toast.LENGTH_LONG))
+                    handleBomDetonation(x, y)
+//                    button.setBackgroundResource(R.mipmap.bomb)
+//                    this
 //                    Toast.makeText(this@GameActivity, "Detonated a bomb!", Toast.LENGTH_LONG).show()
                 }
                 CheckFieldResponse.OK -> {
@@ -118,6 +124,21 @@ class GameActivity : AppCompatActivity() {
                 }
             }
         }
+
+    }
+
+    private fun handleBomDetonation(x : Int, y : Int) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val bombButton = minefieldGridLayout.getChildAt(x* MINEFIELD_WIDTH + y)
+            bombButton.setBackgroundResource(R.mipmap.bomb)
+
+            val count = minefieldGridLayout.childCount
+            for(i in 0 until count) {
+                minefieldGridLayout[i].isClickable = false
+            }
+1
+        }
+
 
     }
 
