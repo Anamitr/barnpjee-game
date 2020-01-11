@@ -36,14 +36,19 @@ public class BurlapMinesweeperService implements MinesweeperService {
     }
 
     @Override
+    public Minefield getTestMinefield() {
+        return null;
+    }
+
+    @Override
     public int enterMineField(String username, String minefieldName) {
         return 0;
     }
 
     @Override
-    public CheckFieldResponse checkField(int x, int y) {
+    public CheckFieldResponse checkField(String minefieldId, String username, int x, int y) {
         Hashtable hashtable = (Hashtable) sendBurlapRequest("checkField",
-                new Object[]{x, y}, CheckFieldResponse.class);
+                new Object[]{minefieldId, username, x, y}, CheckFieldResponse.class);
         CheckFieldResponse checkFieldResponse = CheckFieldResponse.valueOf(hashtable.get("name").toString());
         return checkFieldResponse;
     }

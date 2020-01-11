@@ -8,7 +8,6 @@ import api.service.MinesweeperService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.math.min
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch {
             val minefield = minesweeperService.getMinefield(gameIdEditText.text.toString())
 
-            val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield)
+            val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield, username = usernameEditText.text.toString())
             this@MainActivity.startActivity(intent)
 
         }
