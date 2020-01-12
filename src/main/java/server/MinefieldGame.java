@@ -53,7 +53,8 @@ public class MinefieldGame implements Serializable {
         }
         if (mines[x][y] != 0) {
             gameOver = true;
-            detonatedBombPositon = x*gridW + y;
+            detonatedBombPositon = y*gridW + x;
+            logger.info("detonatedBombPositon = " + x + " * " + gridW + " + " + y + " = " + detonatedBombPositon);
             return CheckFieldResponse.BOMB;
         } else {
             reveal(x, y);
