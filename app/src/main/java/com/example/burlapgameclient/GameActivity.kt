@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -48,6 +49,9 @@ class GameActivity : AppCompatActivity() {
     lateinit var minefield: Minefield
     lateinit var username: String
 
+    val handler = Handler()
+    var lastMoveNumber = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -57,6 +61,36 @@ class GameActivity : AppCompatActivity() {
 
         drawMinefieldGridLayout()
         fetchCurrentPlayer()
+
+        scheduleGameSync()
+    }
+
+    private val checkForUpdatesRunnable: Runnable = object : Runnable {
+        override fun run() {
+            Log.d("Handlers", "Called on main thread")
+            checkForUpdates()
+            handler.postDelayed(this, 2000)
+        }
+    }
+
+    private fun scheduleGameSync() {
+        handler.post(checkForUpdatesRunnable)
+    }
+
+    private fun checkForUpdates() {
+        GlobalScope.launch {
+            val newMoveNumber = minesweeperService.getLastMoveNumber(minefield.id)
+            if(newMoveNumber > lastMoveNumber) {
+                minefield = minesweeperService.getMinefield(minefield.id)
+                drawMinefieldGridLayout()
+                lastMoveNumber = newMoveNumber
+                val currentPlayer = minesweeperService.getCurrentPlayer(minefield.id)
+                setCurrentPlayerLabel(currentPlayer)
+                if(currentPlayer == username) {
+                    EventBus.getDefault().post(CustomApplication.ToastEvent("Your turn!"))
+                }
+            }
+        }
     }
 
     private fun drawMinefieldGridLayout() {

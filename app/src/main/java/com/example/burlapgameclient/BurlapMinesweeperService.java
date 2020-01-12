@@ -65,6 +65,13 @@ public class BurlapMinesweeperService implements MinesweeperService {
     }
 
     @Override
+    public int getLastMoveNumber(String minefieldId) {
+        int lastMoveNumber = (int) sendBurlapRequest("getLastMoveNumber", new Object[]{minefieldId}, int.class);
+        Log.v(TAG, "getLastMoveNumber(" + minefieldId + ") = " + lastMoveNumber);
+        return lastMoveNumber;
+    }
+
+    @Override
     public Minefield getMinefield(String minefieldId) {
         Minefield minefield = new Minefield();
         Hashtable hashtable = (Hashtable) sendBurlapRequest("POST", "getMinefield",
