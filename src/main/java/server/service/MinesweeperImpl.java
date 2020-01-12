@@ -65,5 +65,11 @@ public class MinesweeperImpl implements MinesweeperService {
         return userName;
     }
 
+    @Override
+    public String registerForMinefield(String minefieldId, String username) {
+        String response = minesweeperRepository.registerForMinefield(minefieldId, username);
+        return response;
+    }
+
 
 }

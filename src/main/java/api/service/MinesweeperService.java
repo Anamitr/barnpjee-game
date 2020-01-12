@@ -18,4 +18,6 @@ public interface MinesweeperService {
     Minefield getMinefield (String minefieldId);
 
     String getCurrentPlayer(String minefieldId);
+
+    String registerForMinefield(String minefieldId, String username);
 }

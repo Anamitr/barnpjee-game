@@ -59,4 +59,9 @@ public class MinesweeperRepository {
         return minefieldGame.getCurrentPlayer();
 
     }
+
+    public String registerForMinefield(String minefieldId, String username) {
+        MinefieldGame minefieldGame = getMinefieldGame(minefieldId);
+        return  minefieldGame.registerUser(username);
+    }
 }

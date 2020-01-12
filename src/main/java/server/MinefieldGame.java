@@ -74,12 +74,8 @@ public class MinefieldGame implements Serializable {
                 return CheckFieldResponse.GAME_IS_OVER;
             }
         }
-        if(!players.contains(userName)) {
-            players.add(userName);
-        }
-        if(currentPlayer == null) {
-            currentPlayer = userName;
-        }
+
+
 
         if(!userName.equals(currentPlayer)) {
             return CheckFieldResponse.NOT_YOUR_TURN;
@@ -102,6 +98,16 @@ public class MinefieldGame implements Serializable {
         } else {
             return currentPlayer;
         }
+    }
+
+    public String registerUser(String username) {
+        if(!players.contains(username)) {
+            players.add(username);
+        }
+        if(currentPlayer == null) {
+            currentPlayer = username;
+        }
+        return "Registered user " + username;
     }
 
     Minefield getMinefield() {
@@ -170,7 +176,6 @@ public class MinefieldGame implements Serializable {
         }
         return i;
     }
-
     void setup() {
         //initialize and clear the arrays
         mines = new int[gridW][gridH];
@@ -184,8 +189,8 @@ public class MinefieldGame implements Serializable {
             }
         }
     }
-    //Place numMines mines on the grid
 
+    //Place numMines mines on the grid
     void placeMines() {
         int i = 0;
         Random random = new Random();
@@ -197,6 +202,7 @@ public class MinefieldGame implements Serializable {
             i++;
         }
     }
+
     //Clear the mines
 
     void clearMines() {
