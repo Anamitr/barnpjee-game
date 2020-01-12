@@ -58,6 +58,13 @@ public class BurlapMinesweeperService implements MinesweeperService {
     }
 
     @Override
+    public String registerForMinefield(String minefieldId, String username) {
+        String result = (String) sendBurlapRequest("registerForMinefield", new Object[]{minefieldId, username}, String.class);
+        Log.v(TAG, "registerForMinefield(" + minefieldId + ", " + username + ") = " + result);
+        return result;
+    }
+
+    @Override
     public Minefield getMinefield(String minefieldId) {
         Minefield minefield = new Minefield();
         Hashtable hashtable = (Hashtable) sendBurlapRequest("POST", "getMinefield",

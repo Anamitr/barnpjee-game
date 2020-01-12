@@ -34,9 +34,13 @@ class MainActivity : AppCompatActivity() {
 
     fun startGameActivity(v: View) {
         GlobalScope.launch {
-            val minefield = minesweeperService.getMinefield(gameIdEditText.text.toString())
+            val minefieldId = gameIdEditText.text.toString()
+            val username = usernameEditText.text.toString()
 
-            val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield, username = usernameEditText.text.toString())
+            minesweeperService.registerForMinefield(minefieldId, username)
+            val minefield = minesweeperService.getMinefield(minefieldId)
+
+            val intent = GameActivity.newIntent(context = this@MainActivity, minefield = minefield, username = username)
             this@MainActivity.startActivity(intent)
 
         }
