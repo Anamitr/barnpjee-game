@@ -64,4 +64,9 @@ public class MinesweeperRepository {
         MinefieldGame minefieldGame = getMinefieldGame(minefieldId);
         return  minefieldGame.registerUser(username);
     }
+
+    public int getLastMoveNumber(String minefieldId) {
+        MinefieldGame minefieldGame = getMinefieldGame(minefieldId);
+        return  minefieldGame.getLastMoveNumber();
+    }
 }

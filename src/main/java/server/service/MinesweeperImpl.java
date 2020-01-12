@@ -71,5 +71,8 @@ public class MinesweeperImpl implements MinesweeperService {
         return response;
     }
 
-
+    @Override
+    public int getLastMoveNumber(String minefieldId) {
+        return minesweeperRepository.getLastMoveNumber(minefieldId);
+    }
 }

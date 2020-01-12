@@ -27,6 +27,7 @@ public class MinefieldGame implements Serializable {
     boolean[][] flags; // entry is true if you have flagged that spot
     boolean[][] revealed; // entry is true if that spot is revealed
     int numOfRevealed = 0;
+    int movesCounter = 0;
 
     boolean firstClick = true;
     boolean gameOver = false;
@@ -75,12 +76,11 @@ public class MinefieldGame implements Serializable {
             }
         }
 
-
-
         if(!userName.equals(currentPlayer)) {
             return CheckFieldResponse.NOT_YOUR_TURN;
         }
         nextPlayer();
+        movesCounter++;
         return checkField(y, x);
     }
 
@@ -108,6 +108,10 @@ public class MinefieldGame implements Serializable {
             currentPlayer = username;
         }
         return "Registered user " + username;
+    }
+
+    public int getLastMoveNumber() {
+        return movesCounter;
     }
 
     Minefield getMinefield() {
@@ -162,7 +166,6 @@ public class MinefieldGame implements Serializable {
     boolean outBounds(int x, int y) {
         return x < 0 || y < 0 || x >= gridW || y >= gridH;
     }
-
     int calcNear(int x, int y) {
         int i = 0;
         for (int offsetX = -1; offsetX <= 1; offsetX++) {
@@ -176,6 +179,7 @@ public class MinefieldGame implements Serializable {
         }
         return i;
     }
+
     void setup() {
         //initialize and clear the arrays
         mines = new int[gridW][gridH];
@@ -189,8 +193,8 @@ public class MinefieldGame implements Serializable {
             }
         }
     }
-
     //Place numMines mines on the grid
+
     void placeMines() {
         int i = 0;
         Random random = new Random();
