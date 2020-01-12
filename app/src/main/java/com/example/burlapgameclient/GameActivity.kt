@@ -82,11 +82,14 @@ class GameActivity : AppCompatActivity() {
             val newMoveNumber = minesweeperService.getLastMoveNumber(minefield.id)
             if(newMoveNumber > lastMoveNumber) {
                 minefield = minesweeperService.getMinefield(minefield.id)
-                drawMinefieldGridLayout()
-                lastMoveNumber = newMoveNumber
+
                 val currentPlayer = minesweeperService.getCurrentPlayer(minefield.id)
                 setCurrentPlayerLabel(currentPlayer)
-                if(currentPlayer == username) {
+
+                drawMinefieldGridLayout()
+                lastMoveNumber = newMoveNumber
+
+                if(currentPlayer == username && !minefield.isGameOver) {
                     EventBus.getDefault().post(CustomApplication.ToastEvent("Your turn!"))
                 }
             }
@@ -131,9 +134,11 @@ class GameActivity : AppCompatActivity() {
                 }
 
             if (minefield.isGameOver) {
+                handler.removeCallbacks(checkForUpdatesRunnable)
                 if(minefield.isWasGameWon) {
                     setGameWon()
                 } else {
+                    Log.v(TAG, "Bomb was detonated at position: ${minefield.detonatedBombPosition}")
                     val bombButton = minefieldGridLayout.getChildAt(minefield.detonatedBombPosition)
                     bombButton.setBackgroundResource(R.mipmap.bomb)
                     setGameOver()
@@ -155,6 +160,7 @@ class GameActivity : AppCompatActivity() {
 //                    Toast.makeText(this@GameActivity, "Not your turn!", Toast.LENGTH_SHORT).show()
                 }
                 CheckFieldResponse.BOMB -> {
+                    lastMoveNumber++
                     Log.v(TAG, "Detonated a bomb!")
                     EventBus.getDefault().post(
                         CustomApplication.ToastEvent(
@@ -168,6 +174,7 @@ class GameActivity : AppCompatActivity() {
 //                    Toast.makeText(this@GameActivity, "Detonated a bomb!", Toast.LENGTH_LONG).show()
                 }
                 CheckFieldResponse.OK -> {
+                    lastMoveNumber++
                     minefield = minesweeperService.getMinefield(minefield.id)
                     drawMinefieldGridLayout()
                 }
@@ -189,7 +196,9 @@ class GameActivity : AppCompatActivity() {
 
     private fun handleBomDetonation(x: Int, y: Int) {
         GlobalScope.launch(Dispatchers.Main) {
-            val bombButton = minefieldGridLayout.getChildAt(x * MINEFIELD_WIDTH + y)
+            val positon = x * MINEFIELD_WIDTH + y
+            Log.v(TAG, "Detonated bomb at position: $x * $MINEFIELD_WIDTH + $y = $positon")
+            val bombButton = minefieldGridLayout.getChildAt(positon)
             bombButton.setBackgroundResource(R.mipmap.bomb)
             setGameOver()
         }
@@ -225,8 +234,10 @@ class GameActivity : AppCompatActivity() {
 
     private fun fetchCurrentPlayer() {
         GlobalScope.launch {
-            val fetchCurrentPlayerResult = minesweeperService.getCurrentPlayer(minefield.id)
-            setCurrentPlayerLabel(fetchCurrentPlayerResult)
+            if(!minefield.isGameOver) {
+                val fetchCurrentPlayerResult = minesweeperService.getCurrentPlayer(minefield.id)
+                setCurrentPlayerLabel(fetchCurrentPlayerResult)
+            }
         }
     }
 
@@ -239,6 +250,11 @@ class GameActivity : AppCompatActivity() {
     private fun getTextFromPositon(i: Int, j: Int): CharSequence? {
         val fieldType = minefield.fieldsMatrix[i][j]
         return ""
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(checkForUpdatesRunnable)
     }
 
 

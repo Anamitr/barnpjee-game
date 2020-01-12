@@ -1,6 +1,6 @@
 package com.example.burlapgameclient
 
-val HEROKU_URL = "https://hessian-chat.herokuapp.com/"
+val HEROKU_URL = "https://burlap-minesweeper.herokuapp.com//"
 val LOCALHOST_URL = "http:/10.0.2.2:8080/"
 val BASE_URL = LOCALHOST_URL
 
